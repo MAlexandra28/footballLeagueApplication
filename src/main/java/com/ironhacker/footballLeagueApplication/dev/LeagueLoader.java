@@ -1,15 +1,10 @@
 package com.ironhacker.footballLeagueApplication.dev;
 
-import com.ironhacker.footballLeagueApplication.model.League;
 import com.ironhacker.footballLeagueApplication.model.Player;
-import com.ironhacker.footballLeagueApplication.model.PlayerData;
-import com.ironhacker.footballLeagueApplication.service.PlayerService;
+import com.ironhacker.footballLeagueApplication.service.LeagueService;
 import lombok.RequiredArgsConstructor;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.context.event.ApplicationReadyEvent;
 import org.springframework.context.ApplicationListener;
-import org.springframework.context.annotation.Bean;
-import org.springframework.context.annotation.Lazy;
 import org.springframework.context.annotation.Profile;
 import org.springframework.stereotype.Component;
 
@@ -21,9 +16,7 @@ import java.util.List;
 @Profile("dev")
 public class LeagueLoader implements ApplicationListener<ApplicationReadyEvent> {
 
-    private final PlayerService playerService;
-    @Autowired
-    private final Player player;
+    private final LeagueService playerService;
 
     @Override
     public void onApplicationEvent(ApplicationReadyEvent event) {
@@ -50,10 +43,27 @@ public class LeagueLoader implements ApplicationListener<ApplicationReadyEvent> 
         );
 
         for (PlayerData playerData : playerDataList) {
-            Player player = new Player(playerData.getName(), playerData.getWage());
-            playerService.updatePlayer(player);
+            Player player = new Player(playerData.getName(), (int) playerData.getWage() );
+            playerService.buyPlayer(player, null); // Replace null with the actual buying team
         }
     }
 
+    // Define a class to hold player data
+    private static class PlayerData {
+        private final String name;
+        private final double wage;
 
+        public PlayerData(String name, double wage) {
+            this.name = name;
+            this.wage = wage;
+        }
+
+        public String getName() {
+            return name;
+        }
+
+        public double getWage() {
+            return wage;
+        }
+    }
 }

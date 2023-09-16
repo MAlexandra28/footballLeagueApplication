@@ -1,7 +1,7 @@
 package com.ironhacker.footballLeagueApplication.controller;
 
 import com.ironhacker.footballLeagueApplication.model.Player;
-import com.ironhacker.footballLeagueApplication.service.PlayerService;
+import com.ironhacker.footballLeagueApplication.service.LeagueService;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -13,7 +13,7 @@ import org.springframework.web.bind.annotation.*;
 public class PlayerController {
 
     @Autowired
-    private PlayerService playerService;
+    private LeagueService playerService;
 
     // TODO: GET ALL PLAYERS
 
@@ -27,8 +27,8 @@ public class PlayerController {
 
     // TODO: GET PLAYER BY NAME
     @GetMapping("/search")
-    public ResponseEntity<Player> getPlayerByName(@RequestParam("name") String playerName) {
-        Player player = playerService.getPlayerByName(playerName);
+    public ResponseEntity<Player> getPlayerByName(@RequestParam("name") Long playerName) {
+        Player player = playerService.getPlayerById(playerName);
         if (player != null) {
             return ResponseEntity.ok(player);
         } else {
